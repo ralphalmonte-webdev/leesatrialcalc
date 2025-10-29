@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leesa 120 day trial</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            width: 450px;
+            min-height: 500px;
+            background: #f5f8f8;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0e3739 0%, #164447 100%);
+            color: white;
+            padding: 24px 20px;
+            text-align: center;
+            border-radius: 0;
+            box-shadow: 0 2px 8px rgba(14, 55, 57, 0.2);
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            letter-spacing: -0.02em;
+        }
+
+        .header p {
+            opacity: 0.95;
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        .calculator-body {
+            padding: 20px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid #e3eeed;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #0e3739;
+            margin-bottom: 14px;
+            letter-spacing: -0.01em;
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+        }
+
+        .input-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: #5f6368;
+            margin-bottom: 6px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px 12px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            border: 1.5px solid #d4e3e1;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #0e3739;
+            box-shadow: 0 0 0 3px rgba(14, 55, 57, 0.1);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #0e3739 0%, #164447 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: -0.01em;
+            box-shadow: 0 2px 8px rgba(14, 55, 57, 0.25);
+        }
+
+        .calculate-btn:hover {
+            background: linear-gradient(135deg, #164447 0%, #1e5558 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(14, 55, 57, 0.35);
+        }
+
+        .results {
+            display: none;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            border: 2px solid #e3eeed;
+            margin-bottom: 12px;
+        }
+
+        .result-card.expired {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+            border-color: #ffcdd2;
+        }
+
+        .result-card.warning {
+            background: linear-gradient(135deg, #fffef5 0%, #fff9e6 100%);
+            border-color: #ffe082;
+        }
+
+        .result-card.active {
+            background: linear-gradient(135deg, #f0f8f7 0%, #e8f5f4 100%);
+            border-color: #a8d5d2;
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-size: 12px;
+            font-weight: 500;
+            color: #5f6368;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .result-value {
+            font-size: 56px;
+            font-weight: 700;
+            color: #0e3739;
+            margin: 8px 0;
+            letter-spacing: -0.03em;
+        }
+
+        .result-value.expired {
+            color: #d32f2f;
+        }
+
+        .result-value.warning {
+            color: #f57c00;
+        }
+
+        .extension-info {
+            font-size: 12px;
+            color: #5f6368;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        .progress-container {
+            margin: 20px 0;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 11px;
+            color: #5f6368;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e8f3f2;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0e3739 0%, #164447 100%);
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+
+        .progress-fill.warning {
+            background: linear-gradient(90deg, #f57c00 0%, #ff9800 100%);
+        }
+
+        .progress-fill.expired {
+            background: linear-gradient(90deg, #d32f2f 0%, #e53935 100%);
+        }
+
+        .result-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .info-item {
+            text-align: center;
+            padding: 12px;
+            background: rgba(14, 55, 57, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(14, 55, 57, 0.1);
+        }
+
+        .info-label {
+            font-size: 10px;
+            color: #5f6368;
+            margin-bottom: 4px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .info-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0e3739;
+        }
+
+        .history-section {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            border: 1.5px solid #e3eeed;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .history-item:hover {
+            background: #f5f8f8;
+            border-color: #a8d5d2;
+            transform: translateX(2px);
+        }
+
+        .history-name {
+            font-weight: 600;
+            color: #0e3739;
+        }
+
+        .history-date {
+            color: #5f6368;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .clear-history {
+            width: 100%;
+            padding: 8px;
+            background: white;
+            color: #d32f2f;
+            border: 1.5px solid #ffcdd2;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .clear-history:hover {
+            background: #fff5f5;
+            border-color: #ef9a9a;
+        }
+
+        /* Custom scrollbar for history section */
+        .history-section::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .history-section::-webkit-scrollbar-track {
+            background: #f5f8f8;
+            border-radius: 3px;
+        }
+
+        .history-section::-webkit-scrollbar-thumb {
+            background: #a8d5d2;
+            border-radius: 3px;
+        }
+
+        .history-section::-webkit-scrollbar-thumb:hover {
+            background: #0e3739;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Leesa 120 day calculator</h1>
+        <p>Track trial periods from delivery date</p>
+    </div>
+
+    <div class="calculator-body">
+        <div class="section">
+            <div class="section-title">Trial Date</div>
+            <div class="input-group">
+                <label for="deliveryDate">Delivery Date (Trial Start)</label>
+                <input type="date" id="deliveryDate" required>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Trial Extension</div>
+            <div class="input-group">
+                <label for="extensionDays">Extra Days</label>
+                <input type="number" id="extensionDays" placeholder="0" min="0" max="365" value="0">
+            </div>
+        </div>
+
+        <button class="calculate-btn" onclick="calculateTrial()">Calculate Trial Status</button>
+
+        <div class="results" id="results">
+            <div class="section">
+                <div class="result-card" id="mainResult">
+                    <div class="result-header">
+                        <div class="result-title" id="resultTitle">Days Remaining</div>
+                        <div class="result-value" id="resultValue">--</div>
+                        <div class="extension-info" id="extensionInfo"></div>
+                    </div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span>Trial Progress</span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                    </div>
+
+                    <div class="result-info">
+                        <div class="info-item">
+                            <div class="info-label">Trial Started</div>
+                            <div class="info-value" id="startDate">--</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Trial Ends</div>
+                            <div class="info-value" id="endDate">--</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Days Used</div>
+                            <div class="info-value" id="daysUsed">--</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Status</div>
+                            <div class="info-value" id="trialStatus">--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="historySection" style="display: none;">
+            <div class="section-title">Recent Calculations</div>
+            <div class="history-section" id="historyList"></div>
+            <button class="clear-history" onclick="clearHistory()">Clear History</button>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
